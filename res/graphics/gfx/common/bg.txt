@@ -1,0 +1,37 @@
+↑
+↓
+←
+→
+D
+S
+P
+H
+I
+C
+F1
+F2
+F3
+1
+2
+3
+TAB
+ESC
+
+up
+down
+left
+right
+demo mode on/off
+sound on/off
+toggle pause/play
+show this menu
+show info: level, lives, score, etc.
+cheat mode on/off
+quick save
+quick load
+screen shot
+easy - find exit
+medium - eat all fruits & find exit
+hard - stay alive & find exit
+start new level
+exit the game
