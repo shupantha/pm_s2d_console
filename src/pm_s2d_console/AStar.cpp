@@ -27,16 +27,6 @@ CAStar::~CAStar(void)
 	Destroy();
 }
 
-void CAStar::Stop()
-{
-	m_bStop = true;
-}
-
-void CAStar::Start()
-{
-	m_bStop = false;
-}
-
 bool CAStar::IsReady()
 {
 	if(m_iMapWidth <= 0 || m_iMapHeight <= 0)
@@ -178,8 +168,6 @@ void CAStar::Initialize()
 
 	m_bStop = false;
 
-	m_bUseCUDA = false;
-
 	//////////////////////////////////////////////////////////////////////////
 	// Used by CPU
 
@@ -252,8 +240,6 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 
 	m_bStop = false;
 
-	m_bUseCUDA = false;
-
 	//////////////////////////////////////////////////////////////////////////
 	// Used by CPU
 
@@ -261,7 +247,7 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	m_Map2DWalkability.Create(m_iMapWidth, m_iMapHeight, iWalkability);
 
 	// 1D array of size (m_iMapWidth * m_iMapHeight + 2) holding ID# of open list items
-	m_piOpenListIDs = new int[m_iMapWidth * m_iMapHeight + 2];
+	m_piOpenListIDs = new int[(size_t)m_iMapWidth * m_iMapHeight + 2];
 
 	for(int i = 0; i < m_iMapWidth * m_iMapHeight + 2; i++)
 	{
@@ -272,15 +258,15 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	m_Map2DWhichList.Create(m_iMapWidth + 1, m_iMapHeight + 1, 0);
 
 	// 1D array of size (m_iMapWidth * m_iMapHeight + 2) to store the (x, y) location of an item on the open list
-	m_piptOpenListCoordinates_x = new int[m_iMapWidth * m_iMapHeight + 2];
-	m_piptOpenListCoordinates_y = new int[m_iMapWidth * m_iMapHeight + 2];
+	m_piptOpenListCoordinates_x = new int[(size_t)m_iMapWidth * m_iMapHeight + 2];
+	m_piptOpenListCoordinates_y = new int[(size_t)m_iMapWidth * m_iMapHeight + 2];
 
 	// 2D map of size ([m_iMapWidth + 1][m_iMapHeight + 1]) to store parent of each cell (x, y)
 	m_Map2DCoordinatesParents_x.Create(m_iMapWidth + 1, m_iMapHeight + 1);
 	m_Map2DCoordinatesParents_y.Create(m_iMapWidth + 1, m_iMapHeight + 1);
 
 	// 1D array of size (m_iMapWidth * m_iMapHeight + 2) to store F cost of a cell on the open list
-	m_piFCosts = new int[m_iMapWidth * m_iMapHeight + 2];
+	m_piFCosts = new int[(size_t)m_iMapWidth * m_iMapHeight + 2];
 
 	for(int i = 0; i < m_iMapWidth * m_iMapHeight + 2; i++)
 	{
@@ -291,7 +277,7 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	m_Map2DGCosts.Create(m_iMapWidth + 1, m_iMapHeight + 1, 0);
 
 	// 1D array of size (m_iMapWidth * m_iMapHeight + 2) to store H cost of a cell on the open list
-	m_piHCosts = new int[m_iMapWidth * m_iMapHeight + 2];
+	m_piHCosts = new int[(size_t)m_iMapWidth * m_iMapHeight + 2];
 
 	for(int i = 0; i < m_iMapWidth * m_iMapHeight + 2; i++)
 	{
@@ -299,7 +285,7 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) to store length of the found paths
-	m_piPathLengths = new int[m_iPathFinderCount + 1];
+	m_piPathLengths = new int[(size_t)m_iPathFinderCount + 1];
 
 	for(int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -307,7 +293,7 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) to store current position of a agent along the chosen path
-	m_piPathLocations = new int[m_iPathFinderCount + 1];
+	m_piPathLocations = new int[(size_t)m_iPathFinderCount + 1];
 
 	for(int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -315,7 +301,7 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 2D array of size ([m_iPathFinderCount + 1][4]) for the path bank
-	m_ppiPathBank = new int*[m_iPathFinderCount + 1];
+	m_ppiPathBank = new int*[(size_t)m_iPathFinderCount + 1];
 
 	int iPathFinderIndex = 0;
 
@@ -330,8 +316,8 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) to store the x & y coordinates of the first path step
-	m_piPathBank_x = new int[m_iPathFinderCount + 1];
-	m_piPathBank_y = new int[m_iPathFinderCount + 1];
+	m_piPathBank_x = new int[(size_t)m_iPathFinderCount + 1];
+	m_piPathBank_y = new int[(size_t)m_iPathFinderCount + 1];
 
 	for(int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -340,7 +326,7 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) for the path status
-	m_piPathStatus = new int[m_iPathFinderCount + 1];
+	m_piPathStatus = new int[(size_t)m_iPathFinderCount + 1];
 
 	for(int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -348,8 +334,8 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) for the path coordinates
-	m_piptPath_x = new int[m_iPathFinderCount + 1];
-	m_piptPath_y = new int[m_iPathFinderCount + 1];
+	m_piptPath_x = new int[(size_t)m_iPathFinderCount + 1];
+	m_piptPath_y = new int[(size_t)m_iPathFinderCount + 1];
 
 	for (int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -358,8 +344,8 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) for start locations
-	m_piStartLocations_x = new int[m_iPathFinderCount + 1];
-	m_piStartLocations_y = new int[m_iPathFinderCount + 1];
+	m_piStartLocations_x = new int[(size_t)m_iPathFinderCount + 1];
+	m_piStartLocations_y = new int[(size_t)m_iPathFinderCount + 1];
 
 	for (int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -368,8 +354,8 @@ void CAStar::Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int
 	}
 
 	// 1D array of size (m_iPathFinderCount + 1) for target locations
-	m_piTargetLocations_x = new int[m_iPathFinderCount + 1];
-	m_piTargetLocations_y = new int[m_iPathFinderCount + 1];
+	m_piTargetLocations_x = new int[(size_t)m_iPathFinderCount + 1];
+	m_piTargetLocations_y = new int[(size_t)m_iPathFinderCount + 1];
 
 	for (int i = 0; i < m_iPathFinderCount + 1; i++)
 	{
@@ -1064,7 +1050,7 @@ void CAStar::FindPath(int iPathFinderID, _Point& _ptStartLocation, _Point& _ptTa
 			delete [] m_ppiPathBank[iPathFinderID];
 		}
 
-		m_ppiPathBank[iPathFinderID] = new int[m_piPathLengths[iPathFinderID] * 2];
+		m_ppiPathBank[iPathFinderID] = new int[(size_t)m_piPathLengths[iPathFinderID] * 2];
 
 		// Now copy the path information over to the path bank
 		// Since we are working backwards from the target to the start location,
@@ -1157,29 +1143,14 @@ void CAStar::ReadPath(int iPathFinderID, _Point& _ptCurrentLocation)
 	}
 }
 
-void CAStar::SetWidth(int iMapWidth)
-{
-	m_iMapWidth = iMapWidth;
-}
-
 int CAStar::GetWidth()
 {
 	return m_iMapWidth;
 }
 
-void CAStar::SetHeight(int iMapHeight)
-{
-	m_iMapHeight = iMapHeight;
-}
-
 int CAStar::GetHeight()
 {
 	return m_iMapHeight;
-}
-
-void CAStar::SetPathFinderCount(int iPathFinderCount)
-{
-	m_iPathFinderCount = iPathFinderCount;
 }
 
 int CAStar::GetPathFinderCount()

@@ -16,13 +16,7 @@ private:
 	int m_iOnClosedList;
 
 	bool m_bStop;
-
-	bool m_bUseCUDA;
 	//////////////////////////////////////////////////////////////////////////
-
-public:
-	void Stop();
-	void Start();
 
 public:
 	// Path related constants
@@ -114,7 +108,6 @@ public:
 
 public:
 	bool IsReady();
-
 	bool IsValid(_Point _pt);
 
 private:
@@ -122,7 +115,6 @@ private:
 
 public:
 	void Initialize(int iMapWidth, int iMapHeight, int iPathFinderCount, int iWalkability = WALKABLE);
-
 	void Destroy();
 
 public:
@@ -143,21 +135,15 @@ private:
 	void ReadPath(int iPathFinderID, _Point& _ptCurrentLocation);
 
 public:
-	void SetWidth(int iMapWidth);
 	int GetWidth();
-
-	void SetHeight(int iMapHeight);
 	int GetHeight();
 
-	void SetPathFinderCount(int iPathFinderCount);
 	int GetPathFinderCount();
 
 	void SetMapWalkability(_Point& _pt, int iValue);
-
 	int GetMapWalkability(_Point& _pt);
 
 	void DrawLine(_Point& _ptPrevious, _Point& _ptNext, int iValue, bool bIncludeEnd);
-
 	void FloodFill(_Point& _pt, int iValue);
 
 public:
