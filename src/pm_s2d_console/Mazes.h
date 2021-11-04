@@ -122,6 +122,11 @@ namespace mazes
 
 		tiles getTile(int x, int y)
 		{
+			if (x < 0 || y < 0)
+			{
+				return tiles::invalid;
+			}
+
 			if (x >= _sX || y >= _sY)
 			{
 				return tiles::invalid;
@@ -151,7 +156,7 @@ namespace mazes
 		void generate()
 		{
 			killArray();
-			size_t szMem = (size_t)(static_cast<__int64>(_sX) * static_cast<__int64>(_sY)) + 1;
+			size_t szMem = (size_t)((size_t)_sX * _sY) + 1;
 			_pWorld = new unsigned char[szMem];
 			memset(_pWorld, 0, szMem);
 			_ptX = rand() % _sX;
