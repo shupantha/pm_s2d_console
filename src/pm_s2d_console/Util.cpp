@@ -80,6 +80,11 @@ v9.00
 #define _getcwd getcwd
 #endif
 
+#pragma warning(disable : 6031)
+#pragma warning(disable : 6387)
+#pragma warning(disable : 6255)
+#pragma warning(disable : 28159)
+
 CUtil::CUtil(void)
 {
 }
@@ -2778,7 +2783,7 @@ bool CUtil::nextCombination(vector<int>& _viCombination, int _ik, int _in)
 	// Turn it into (... , x, x + 1, x + 2, ...)
 	for (i = i + 1; i < _ik; ++i)
 	{
-		_viCombination[i] = _viCombination[i - 1] + 1;
+		_viCombination[i] = _viCombination[(size_t)i - 1] + 1;
 	}
 
 	return true;
@@ -2843,7 +2848,7 @@ double CUtil::get_nCk(int _in, int _ik)
 	double nCk = 1.0;
 	for (int i = 1; i <= _ik; i++)
 	{
-		nCk *= ((double)(_in - (i - 1)) / i);
+		nCk *= ((double)((double)_in - ((double)i - 1)) / i);
 	}
 	return nCk;
 }
@@ -2950,7 +2955,7 @@ double CUtil::get_nPk(int _in, int _ik)
 	double nPk = 1.0;
 	for (int i = 0; i < _ik; i++)
 	{
-		nPk *= (double)(_in - i);
+		nPk *= (double)((double)_in - i);
 	}
 	return nPk;
 }
