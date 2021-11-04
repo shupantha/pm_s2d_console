@@ -9,6 +9,8 @@
 #undef min
 #endif 
 
+#pragma warning(disable : 26812)
+
 ////////
 // settings
 extern CSettings g_settings;

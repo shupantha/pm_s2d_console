@@ -11,6 +11,8 @@
 
 #include <thread>
 
+#pragma warning(disable : 26812)
+
 class CGameWorld
 {
 public:

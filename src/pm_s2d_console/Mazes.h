@@ -41,6 +41,9 @@ V 1.0
 #include <stdio.h>
 #include <math.h>
 
+#pragma warning(disable : 26812)
+#pragma warning(disable : 26451)
+
 namespace mazes
 {
 	//--------------------------------------------------------------------------------------------------
@@ -148,8 +151,9 @@ namespace mazes
 		void generate()
 		{
 			killArray();
-			_pWorld = new unsigned char[(_sX * _sY) + 1];
-			memset(_pWorld, 0, (_sX * _sY) + 1);
+			size_t szMem = (size_t)(static_cast<__int64>(_sX) * static_cast<__int64>(_sY)) + 1;
+			_pWorld = new unsigned char[szMem];
+			memset(_pWorld, 0, szMem);
 			_ptX = rand() % _sX;
 			_ptY = rand() % _sY;
 			carve();

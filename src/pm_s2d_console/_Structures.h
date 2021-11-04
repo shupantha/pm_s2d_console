@@ -95,7 +95,7 @@ public:
 public:
 	double GetDistanceFrom(const _Point& _pt) const
 	{
-		double dDistance = (x - _pt.x) * (x - _pt.x) + (y - _pt.y) * (y - _pt.y);
+		double dDistance = ((double)x - _pt.x) * ((double)x - _pt.x) + ((double)y - _pt.y) * ((double)y - _pt.y);
 		dDistance = sqrt(dDistance);
 
 		return dDistance;

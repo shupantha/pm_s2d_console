@@ -79,6 +79,11 @@ void StartGameWorld(unsigned int uiLevel)
 		g_pGameWindow->on_mouse = on_mouse;
 	}
 
+	if (g_pGameWindow == nullptr)
+	{
+		return;
+	}
+
 	g_gw.LoadLevel(uiLevel, g_pGameWindow);
 
 	// initialize the game world

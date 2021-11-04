@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GfxWorld.h"
 #include "Settings.h"
 #include "GfxDoor.h"
@@ -6,6 +6,8 @@
 #include "GfxPill.h"
 #include "GfxRunner.h"
 #include "Mazes.h"
+
+#pragma warning(disable : 26812)
 
 // settings
 extern CSettings g_settings;
@@ -222,8 +224,8 @@ bool CGfxWorld::SetMaze(const unsigned char* pMaze, int iMazeSizeX, int iMazeSiz
 
 	m_iWallSize = g_settings.wallSize;
 
-	m_iSpriteWidth != 0 ? m_dSpriteScaleX = (double)(iCellSize - m_iWallSize) / m_iSpriteWidth : 0;
-	m_iSpriteHeight != 0 ? m_dSpriteScaleY = (double)(iCellSize - m_iWallSize) / m_iSpriteHeight : 0;
+	m_iSpriteWidth != 0 ? m_dSpriteScaleX = ((double)iCellSize - m_iWallSize) / m_iSpriteWidth : 0;
+	m_iSpriteHeight != 0 ? m_dSpriteScaleY = ((double)iCellSize - m_iWallSize) / m_iSpriteHeight : 0;
 
 	m_iSpriteScaledWidth = (int)(m_iSpriteWidth * m_dSpriteScaleX) - 1;
 	m_iSpriteScaledHeight = (int)(m_iSpriteHeight * m_dSpriteScaleY) - 1;
@@ -291,19 +293,35 @@ void CGfxWorld::Draw(CAgent& agent, int iIndex, bool bNoExtras)
 
 	if (agent.id() == RUNNER)
 	{
-		/*
 		if (agent.state() == CAgent::ALIVE)
 		{
-			std::string str = "";
-			str += g_bSpeedBoost ? "o" : "";
-			str += g_bTimeBoost ? "k" : "";
-			str += g_bPermaKill ? "m" : "";
-			str += g_bShowPathToExit ? "d" : "";
+			int iCount = 0;
+			if (g_bSpeedBoost) iCount++;
+			if (g_bTimeBoost) iCount++;
+			if (g_bPermaKill) iCount++;
+			if (g_bShowPathToExit) iCount++;
 
+			std::string str = "";
+			switch (iCount)
+			{
+			case 1:
+				str = ".";
+				break;
+			case 2:
+				str = ":";
+				break;
+			case 3:
+				str = ":.";
+				break;
+			case 4:
+				str = "::";
+				break;
+			default:
+				break;
+			}
 			pGfxElement->DrawInfo(x, y, (void*)&str);
 		}
-		*/
-		/*
+
 		if (agent.state() == CAgent::DEAD)
 		{
 			int t = (int)agent.state_time();
@@ -314,7 +332,6 @@ void CGfxWorld::Draw(CAgent& agent, int iIndex, bool bNoExtras)
 				pGfxElement->DrawInfo(x, y, (void*)& str);
 			}
 		}
-		*/
 	}
 
 	if (agent.id() == GINKY || agent.id() == BINKY || agent.id() == YINKY || agent.id() == RINKY)
@@ -354,7 +371,7 @@ void CGfxWorld::Draw(vector<_Point>& vptPath)
 
 	for (int i = 1; i < (int)vptPath.size(); ++i)
 	{
-		_Point pt1 = vptPath.at(i - 1);
+		_Point pt1 = vptPath.at((size_t)i - 1);
 		float x1 = pt1.x + m_iWallSize + m_iCellSize / 2.0f;
 		float y1 = pt1.y + m_iWallSize + m_iCellSize / 2.0f;
 

@@ -12,7 +12,7 @@ private:
 	int m_iHeight;
 
 public:
-	CMap2D(void)	{ m_piMap = nullptr; };
+	CMap2D(void) { m_piMap = nullptr; m_iWidth = 0; m_iHeight = 0; };
 	CMap2D(int iWidth, int iHeight) { Create(iWidth, iHeight); };
 
 	~CMap2D(void) { Destroy(); };
@@ -30,7 +30,7 @@ public:
 
 		if(m_iWidth == iWidth && m_iHeight == iHeight && m_iWidth > 0 && m_iHeight > 0)
 		{
-			memcpy(m_piMap, M.GetMemory(), m_iHeight * m_iWidth * sizeof(int));
+			memcpy(m_piMap, M.GetMemory(), (size_t)m_iHeight * m_iWidth * sizeof(int));
 
 			return *this;
 		}
@@ -42,7 +42,7 @@ public:
 
 		Create(iWidth, iHeight);
 
-		memcpy(m_piMap, M.GetMemory(), m_iHeight * m_iWidth * sizeof(int));
+		memcpy(m_piMap, M.GetMemory(), (size_t)m_iHeight * m_iWidth * sizeof(int));
 
 		return *this;
 	};
@@ -152,7 +152,7 @@ public:
 			Destroy();
 		}
 
-		m_piMap = new int[iWidth * iHeight];
+		m_piMap = new int[(size_t)iWidth * iHeight];
 
 		if(m_piMap == nullptr)
 		{
@@ -227,7 +227,7 @@ public:
 			return;
 		}
 
-		memset(m_piMap, iValue, m_iWidth * m_iHeight * sizeof(int));
+		memset(m_piMap, iValue, (size_t)m_iWidth * m_iHeight * sizeof(int));
 	};
 
 	void DrawLine(_Point _ptStart, _Point _ptEnd, int iColor, bool bIncludeEnd = true)
@@ -358,7 +358,7 @@ private:
 	int m_iHeight;
 
 public:
-	CMap2DCoordinates(void)	{ m_pptMap = nullptr; };
+	CMap2DCoordinates(void)	{ m_pptMap = nullptr; m_iWidth = 0; m_iHeight = 0; };
 	CMap2DCoordinates(int iWidth, int iHeight) { Create(iWidth, iHeight, _Point()); };
 
 	~CMap2DCoordinates(void) { Destroy(); };
@@ -376,7 +376,7 @@ public:
 
 		if(m_iWidth == iWidth && m_iHeight == iHeight && m_iWidth > 0 && m_iHeight > 0)
 		{
-			memcpy(m_pptMap, M.GetMemory(), m_iHeight * m_iWidth * sizeof(_Point));
+			memcpy(m_pptMap, M.GetMemory(), (size_t)m_iHeight * m_iWidth * sizeof(_Point));
 
 			return *this;
 		}
@@ -388,7 +388,7 @@ public:
 
 		Create(iWidth, iHeight, _Point());
 
-		memcpy(m_pptMap, M.GetMemory(), m_iHeight * m_iWidth * sizeof(_Point));
+		memcpy(m_pptMap, M.GetMemory(), (size_t)m_iHeight * m_iWidth * sizeof(_Point));
 
 		return *this;
 	};
@@ -498,7 +498,7 @@ public:
 			Destroy();
 		}
 
-		m_pptMap = new _Point[iWidth * iHeight];
+		m_pptMap = new _Point[(size_t)iWidth * iHeight];
 
 		if(m_pptMap == nullptr)
 		{
