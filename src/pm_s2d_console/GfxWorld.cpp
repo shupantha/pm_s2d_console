@@ -236,20 +236,20 @@ bool CGfxWorld::SetMaze(const unsigned char* pMaze, int iMazeSizeX, int iMazeSiz
 void CGfxWorld::Draw(vector<CAgent>& vAgents, vector<_Point>& vptPath, bool bgOnly, bool bNoExtras)
 {
 	// Draw maze / background
+	DrawMaze();
+
+	if (bgOnly)
 	{
-		DrawMaze();
+		return;
 	}
 
-	if (!bgOnly)
-	{
-		// draw agents
-		Draw(vAgents, bNoExtras);
+	// draw agents
+	Draw(vAgents, bNoExtras);
 
-		// draw path
-		Draw(vptPath);
+	// draw path
+	Draw(vptPath);
 
-		m_iFrameCounter++;
-	}
+	m_iFrameCounter++;
 }
 
 void CGfxWorld::Draw(vector<CAgent>& vAgents, bool bNoExtras)
