@@ -57,7 +57,6 @@ CTimer g_timerRun;
 unsigned int g_uiIterations = 0;
 double g_dFPS = 0.0;
 
-
 void StartGameWorld(unsigned int uiLevel)
 {
 	if (g_pGameWindow == nullptr && g_bFirstTime)
@@ -208,7 +207,6 @@ void UpdateGameWorld()
 		// fps
 		g_strText += "fps = ";
 		g_strText += CUtil::toStringA(g_dFPS, 1);
-		
 
 		// key press
 		if (!g_strKey.empty())
