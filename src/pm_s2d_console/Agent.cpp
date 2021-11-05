@@ -6,6 +6,8 @@
 // ugly global mutex, but it's the simplest solution
 std::mutex g_agentMutex;
 
+#pragma warning(disable : 26812)
+
 _Point CAgent::Move(int iCellSize, double dTimeElapsed)
 {
 	// lock
