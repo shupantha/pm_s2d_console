@@ -255,7 +255,7 @@ void CGfxWorld::Draw(vector<CAgent>& vAgents, vector<_Point>& vptPath, bool bgOn
 void CGfxWorld::Draw(vector<CAgent>& vAgents, bool bNoExtras)
 {
 	// draw every agent
-	for (int i = (int)vAgents.size() - 1; i >= 0; --i)
+	for (int i = 0; i < (int)vAgents.size(); ++i)
 	{
 		CAgent agent = vAgents.at(i);
 
@@ -266,7 +266,7 @@ void CGfxWorld::Draw(vector<CAgent>& vAgents, bool bNoExtras)
 
 		if (bNoExtras && agent.id() == PILL)
 		{
-			continue;
+			break;
 		}
 
 		Draw(agent, i, bNoExtras);
