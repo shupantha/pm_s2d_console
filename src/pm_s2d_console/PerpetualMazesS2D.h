@@ -16,5 +16,8 @@ void LoadGame();
 
 void ScreenShot();
 
+void OpenSaveGameFolder();
+void OpenSaveGameFile();
+
 void Cheat();
 void StartNextLevel();

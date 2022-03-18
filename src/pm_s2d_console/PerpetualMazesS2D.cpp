@@ -347,6 +347,16 @@ void on_key(S2D_Event e)
 			ScreenShot();
 		}
 
+		if (CUtil::compareNoCase(std::string(e.key), "F7") == 0)
+		{
+			OpenSaveGameFolder();
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "F8") == 0)
+		{
+			OpenSaveGameFile();
+		}
+
 		if (CUtil::compareNoCase(std::string(e.key), "1") == 0)
 		{
 			g_gw.SetEasy();
@@ -489,7 +499,7 @@ void SaveGame()
 
 void LoadGame()
 {
-	// get the saved level from file
+	// load the saved level from file
 	_tstring strFilePath = g_gw.GetPMDirectory();
 	strFilePath += SAVE_FILE_NAME;
 
@@ -526,7 +536,7 @@ void ScreenShot()
 		return;
 	}
 
-	// get the saved level from file
+	// save the screen shot to file
 	_tstring strFilePath = g_gw.GetPMDirectory();
 	strFilePath += SCREEN_SHOT_NAME;
 	strFilePath += _T("-");
@@ -534,6 +544,23 @@ void ScreenShot()
 	strFilePath += SCREEN_SHOT_EXT;
 
 	S2D_Screenshot(g_pGameWindow, CUtil::getStringA(strFilePath).c_str());
+}
+
+void OpenSaveGameFolder()
+{
+	// get the save game folder path
+	_tstring strFilePath = g_gw.GetPMDirectory();
+
+	ShellExecute(0, 0, strFilePath.c_str(), 0, 0, SW_SHOW);
+}
+
+void OpenSaveGameFile()
+{
+	// get the save game file path
+	_tstring strFilePath = g_gw.GetPMDirectory();
+	strFilePath += SAVE_FILE_NAME;
+
+	ShellExecute(0, 0, strFilePath.c_str(), 0, 0, SW_SHOW);
 }
 
 void Cheat()
