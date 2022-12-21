@@ -1432,23 +1432,17 @@ bool CGameWorld::Move(AGENT_ID aID, int gridX, int gridY)
 		return false;
 	}
 
-	// get the current agent position
-	_Point ptCurrent = GetAgent(aID).GetCurrentLocation();
-
-	// nth runner position
-	_Point ptNext = ptCurrent;
-	ptNext.x = gridX;
-	ptNext.y = gridY;
-
+	// nth runner position, initialize with current agent position
+	_Point ptNext(gridX, gridY);
 	if (!m_Maze.IsValidLocation(ptNext))
 	{
 		return false;
 	}
 
 	// set the new agent positions
-	GetAgent(aID).SetLocations(ptCurrent, ptNext);
+	GetAgent(aID).SetEnd(ptNext);
 	GetAgent(aID).SetTarget(ptNext);
-	GetAgent(aID).Move(GetCellSize(), 0.0);
+	GetAgent(aID).Move(GetCellSize(), 0.0, false);
 
 	g_bShowPathToClick = true;
 

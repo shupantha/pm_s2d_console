@@ -14,9 +14,10 @@ _Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartPos /* 
 	g_agentMutex.lock();
 
 	// start point in screen coordinates
-	_Point _ptStart = m_ptStart;
+	_Point _ptStart(0, 0);
 	if (bUpdateStartPos)
 	{
+		_ptStart = m_ptStart;
 		_ptStart.x = _ptStart.x / 2;
 		_ptStart.x = _ptStart.x * iCellSize;
 		_ptStart.y = _ptStart.y / 2;
