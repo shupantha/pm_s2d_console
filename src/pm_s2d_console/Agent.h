@@ -202,8 +202,20 @@ public:
 		m_ptStart = _ptStart;
 		m_ptEnd = _ptEnd;
 
-		m_bDoneMoving = (_ptStart == _ptEnd);
+		m_bDoneMoving = (m_ptStart == m_ptEnd);
 	};
+
+	void SetStart(_Point _ptStart)
+	{
+		m_ptStart = _ptStart;
+		m_bDoneMoving = (m_ptStart == m_ptEnd);
+	}
+
+	void SetEnd(_Point _ptEnd)
+	{
+		m_ptEnd = _ptEnd;
+		m_bDoneMoving = (m_ptStart == m_ptEnd);
+	}
 
 	_Point GetCurrentLocation()	{ return m_ptStart; };
 	_Point GetNextLocation() { return m_ptEnd; };
@@ -269,7 +281,7 @@ public:
 	};
 
 public:
-	_Point Move(int iCellSize, double dTimeElapsed);
+	_Point Move(int iCellSize, double dTimeElapsed, bool bUpdateStartPos = true);
 
 	bool IsDoneMoving()	{ return m_bDoneMoving; };
 

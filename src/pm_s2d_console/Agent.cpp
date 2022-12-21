@@ -8,17 +8,24 @@ std::mutex g_agentMutex;
 
 #pragma warning(disable : 26812)
 
-_Point CAgent::Move(int iCellSize, double dTimeElapsed)
+_Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartPos /* = true*/)
 {
 	// lock
 	g_agentMutex.lock();
 
 	// start point in screen coordinates
 	_Point _ptStart = m_ptStart;
-	_ptStart.x = _ptStart.x / 2;
-	_ptStart.x = _ptStart.x * iCellSize;
-	_ptStart.y = _ptStart.y / 2;
-	_ptStart.y = _ptStart.y * iCellSize;
+	if (bUpdateStartPos)
+	{
+		_ptStart.x = _ptStart.x / 2;
+		_ptStart.x = _ptStart.x * iCellSize;
+		_ptStart.y = _ptStart.y / 2;
+		_ptStart.y = _ptStart.y * iCellSize;
+	}
+	else
+	{
+		_ptStart = m_agent.position;
+	}
 
 	// end point in screen coordinates
 	_Point _ptEnd = m_ptEnd;

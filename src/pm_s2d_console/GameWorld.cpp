@@ -1373,11 +1373,8 @@ bool CGameWorld::Move(CAgent::directions direction)
 		return false;
 	}
 
-	// get the current runner position
-	_Point ptCurrent = GetAgent(RUNNER).GetCurrentLocation();
-	
-	// nth runner position
-	_Point ptNextn = ptCurrent;
+	// nth runner position starts at current runner position
+	_Point ptNextn = GetAgent(RUNNER).GetCurrentLocation();
 
 	// flag
 	bool bHasMoved = false;
@@ -1411,9 +1408,9 @@ bool CGameWorld::Move(CAgent::directions direction)
 		}
 
 		// set the new runner positions
-		GetAgent(RUNNER).SetLocations(ptCurrent, ptNextn);
+		GetAgent(RUNNER).SetEnd(ptNextn);
 		GetAgent(RUNNER).SetTarget(ptNextn);
-		GetAgent(RUNNER).Move(GetCellSize(), 0.0);
+		GetAgent(RUNNER).Move(GetCellSize(), 0.0, false);
 
 		bHasMoved = true;
 
