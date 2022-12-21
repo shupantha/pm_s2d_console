@@ -29,3 +29,9 @@ This README describes the steps that are necessary to get the application up and
 ### Contacts ###
 
 * Shup
+
+### Kudos ###
+
+The game is built using the Simple2D open-source 2D graphics engine.
+
+https://github.com/simple2d/simple2d
