@@ -8,7 +8,7 @@
 !define COMP_NAME "Shup & Co."
 !define WEB_SITE "https://shupantha.wordpress.com/2019/10/26/perpetual-mazes/"
 !define VERSION "10.00.00.01"
-!define COPYRIGHT "Shup © 2022"
+!define COPYRIGHT "Shup © 2023"
 !define DESCRIPTION "Maze Game"
 !define INSTALLER_NAME "C:\bitbucket\pm_s2d_console\installer\pm-setup.exe"
 !define MAIN_APP_EXE "pm_s2d_console.exe"
