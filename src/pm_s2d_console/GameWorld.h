@@ -203,7 +203,7 @@ public:
 
 public:
 	bool Move(CAgent::directions direction);
-	bool Move(AGENT_ID aID, int gridX, int gridY);
+	bool Move(AGENT_ID aID, _Point ptGrid);
 
 private:
 	bool IsIntersection(_Point pt, CAgent::directions direction);

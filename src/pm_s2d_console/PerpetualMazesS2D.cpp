@@ -588,16 +588,12 @@ void Cheat()
 		return;
 	}
 
-	int x = g_x / g_gw.GetCellSize();
-	int y = g_y / g_gw.GetCellSize();
+	_Point ptGrid = CAgent::ToGrid(g_gw.GetCellSize(), _Point(g_x, g_y));
 
-	x = 2 * x + 1;
-	y = 2 * y + 1;
+	g_x = ptGrid.x / 2;
+	g_y = ptGrid.y / 2;
 
-	g_x = x / 2;
-	g_y = y / 2;
-
-	g_gw.Move(AGENT_ID::RUNNER, x, y);
+	g_gw.Move(AGENT_ID::RUNNER, ptGrid);
 }
 
 void StartNextLevel()

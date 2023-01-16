@@ -281,7 +281,35 @@ public:
 	};
 
 public:
-	_Point Move(int iCellSize, double dTimeElapsed, bool bUpdateStartPos = true);
+	_Point Move(int iCellSize, double dTimeElapsed);
+
+	static _Point ToGrid(int iCellSize, _Point ptScreen)
+	{
+		_Point _ptGrid(0, 0);
+
+		if (iCellSize <= 0)
+		{
+			return _ptGrid;
+		}
+
+		_ptGrid.x = ptScreen.x / iCellSize;
+		_ptGrid.y = ptScreen.y / iCellSize;
+
+		_ptGrid.x = 2 * _ptGrid.x + 1;
+		_ptGrid.y = 2 * _ptGrid.y + 1;
+
+		return _ptGrid;
+	};
+
+	static _Point ToScreen(int iCellSize, _Point ptGrid)
+	{
+		_Point _ptScreen = ptGrid;
+		_ptScreen.x = _ptScreen.x / 2;
+		_ptScreen.x = _ptScreen.x * iCellSize;
+		_ptScreen.y = _ptScreen.y / 2;
+		_ptScreen.y = _ptScreen.y * iCellSize;
+		return _ptScreen;
+	};
 
 	bool IsDoneMoving()	{ return m_bDoneMoving; };
 
@@ -294,11 +322,7 @@ public:
 			_Point pt = vptMaze[i];
 
 			// point in screen coordinates
-			_Point _pt = pt;
-			_pt.x = _pt.x / 2;
-			_pt.x = _pt.x * iCellSize;
-			_pt.y = _pt.y / 2;
-			_pt.y = _pt.y * iCellSize;
+			_Point _pt = ToScreen(iCellSize, pt);
 
 			vptScreen.push_back(_pt);
 		}

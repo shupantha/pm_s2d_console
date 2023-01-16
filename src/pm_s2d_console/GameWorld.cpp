@@ -1410,7 +1410,6 @@ bool CGameWorld::Move(CAgent::directions direction)
 		// set the new runner positions
 		GetAgent(RUNNER).SetEnd(ptNextn);
 		GetAgent(RUNNER).SetTarget(ptNextn);
-		GetAgent(RUNNER).Move(GetCellSize(), 0.0, false);
 
 		bHasMoved = true;
 
@@ -1424,7 +1423,7 @@ bool CGameWorld::Move(CAgent::directions direction)
 	return bHasMoved;
 }
 
-bool CGameWorld::Move(AGENT_ID aID, int gridX, int gridY)
+bool CGameWorld::Move(AGENT_ID aID, _Point ptGrid)
 {
 	// check
 	if (m_bIsDemo)
@@ -1433,7 +1432,7 @@ bool CGameWorld::Move(AGENT_ID aID, int gridX, int gridY)
 	}
 
 	// nth runner position, initialize with current agent position
-	_Point ptNext(gridX, gridY);
+	_Point ptNext = ptGrid;
 	if (!m_Maze.IsValidLocation(ptNext))
 	{
 		return false;
@@ -1442,7 +1441,6 @@ bool CGameWorld::Move(AGENT_ID aID, int gridX, int gridY)
 	// set the new agent positions
 	GetAgent(aID).SetEnd(ptNext);
 	GetAgent(aID).SetTarget(ptNext);
-	GetAgent(aID).Move(GetCellSize(), 0.0, false);
 
 	g_bShowPathToClick = true;
 
