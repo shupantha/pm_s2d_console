@@ -281,7 +281,7 @@ public:
 	};
 
 public:
-	_Point Move(int iCellSize, double dTimeElapsed);
+	_Point Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocation = true);
 
 	static _Point ToGrid(int iCellSize, _Point ptScreen)
 	{

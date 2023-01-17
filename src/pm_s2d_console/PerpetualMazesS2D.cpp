@@ -385,6 +385,25 @@ void on_key(S2D_Event e)
 
 	case S2D_KEY_HELD:
 		// Key is being held down
+		if (CUtil::compareNoCase(std::string(e.key), "Up") == 0)
+		{
+			g_gw.Move(CAgent::NORTH);
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "Down") == 0)
+		{
+			g_gw.Move(CAgent::SOUTH);
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "Left") == 0)
+		{
+			g_gw.Move(CAgent::WEST);
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "Right") == 0)
+		{
+			g_gw.Move(CAgent::EAST);
+		}
 		break;
 
 	case S2D_KEY_UP:

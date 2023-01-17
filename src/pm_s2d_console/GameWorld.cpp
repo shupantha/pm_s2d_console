@@ -687,7 +687,15 @@ bool CGameWorld::MoveAgent(int iAgentIndex)
 		double dTime = agent.timer().GetElapsedTime();
 
 		// move and set the screen position
-		agent.Move(GetCellSize(), dTime);
+		if (agent.id() == RUNNER && !agent.IsDoneMoving())
+		{
+			agent.Move(GetCellSize(), dTime, false);
+			agent.timer().Start();
+		}
+		else
+		{
+			agent.Move(GetCellSize(), dTime);
+		}
 
 		if (agent.IsDoneMoving() || dTime == 0.0)
 		{
@@ -1408,7 +1416,6 @@ bool CGameWorld::Move(CAgent::directions direction)
 		}
 
 		// set the new runner positions
-		GetAgent(RUNNER).SetEnd(ptNextn);
 		GetAgent(RUNNER).SetTarget(ptNextn);
 
 		bHasMoved = true;
@@ -1439,7 +1446,6 @@ bool CGameWorld::Move(AGENT_ID aID, _Point ptGrid)
 	}
 
 	// set the new agent positions
-	GetAgent(aID).SetEnd(ptNext);
 	GetAgent(aID).SetTarget(ptNext);
 
 	g_bShowPathToClick = true;
