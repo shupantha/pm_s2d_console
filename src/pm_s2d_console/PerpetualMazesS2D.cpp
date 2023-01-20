@@ -628,7 +628,7 @@ void Cheat()
 	}
 	else
 	{
-		if (ptGrid.IsNear(g_gw.GetAgent(RUNNER).GetCurrentLocation(), 3.0))
+		if (ptGrid.IsNearFast(g_gw.GetAgent(RUNNER).GetCurrentLocation(), 3))
 		{
 			g_gw.Move(AGENT_ID::RUNNER, ptGrid);
 		}

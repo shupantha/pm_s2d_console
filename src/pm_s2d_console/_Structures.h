@@ -105,6 +105,13 @@ public:
 	{
 		return (GetDistanceFrom(_pt) <= dDistance);
 	};
+
+	bool IsNearFast(const _Point& _pt, int iD = 1) const
+	{
+		int iDistance = (x - _pt.x) * (x - _pt.x) + (y - _pt.y) * (y - _pt.y);
+
+		return (iDistance <= (iD * iD));
+	}
 };
 //////////////////////////////////////////////////////////////////////////
 

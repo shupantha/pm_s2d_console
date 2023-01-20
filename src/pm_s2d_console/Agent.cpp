@@ -163,7 +163,7 @@ bool CAgent::IsInTransit(_Point ptPos)
 	_Point ptGrid = ToGrid(ptPos);
 	_Point ptScreen = ToScreen(ptGrid);
 
-	return !ptPos.IsNear(ptScreen, 2.0);
+	return !ptPos.IsNearFast(ptScreen, 2);
 }
 
 bool CAgent::IsDoneMoving()

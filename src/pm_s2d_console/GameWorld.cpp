@@ -799,7 +799,7 @@ vector<CAgent*> CGameWorld::CollisionCheck()
 		CAgent& agent = m_vAgents.at(i);
 		_Point ptAgent = agent.position();
 
-		if (ptRunner.IsNear(ptAgent, (double)GetCellSize() / 2.0))
+		if (ptRunner.IsNearFast(ptAgent, GetCellSize() / 2))
 		{
 			vAgents.push_back(&agent);
 		}
