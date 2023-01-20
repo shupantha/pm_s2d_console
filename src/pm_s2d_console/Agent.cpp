@@ -6,6 +6,9 @@
 // ugly global mutex, but it's the simplest solution
 std::mutex g_agentMutex;
 
+// ugly global for simplicity :-P
+static int g_iCellSize = 1;
+
 #pragma warning(disable : 26812)
 
 _Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocation /* = true*/)
@@ -13,28 +16,31 @@ _Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocatio
 	// lock
 	g_agentMutex.lock();
 
+	// update cell size
+	g_iCellSize = iCellSize;
+
 	// start point in screen coordinates
 	_Point _ptStart = position();
 	if (bUpdateStartLocation)
 	{
-		_ptStart = ToScreen(iCellSize, m_ptStart);
+		_ptStart = ToScreen(m_ptStart);
 	}
 
-	// end point in screen coordinates
-	_Point _ptEnd = ToScreen(iCellSize, m_ptEnd);
+	// next point in screen coordinates
+	_Point _ptNext = ToScreen(m_ptNext);
 
 	// if done moving or end point has been reached, then return end point
-	if (m_bDoneMoving || _ptStart == _ptEnd)
+	if (m_bDoneMoving || _ptStart == _ptNext)
 	{
 		m_bDoneMoving = true;
 
-		m_agent.position = _ptEnd;
+		m_agent.position = _ptNext;
 		SetDirection();
 
 		// unlock before returning
 		g_agentMutex.unlock();
 
-		return _ptEnd;
+		return _ptNext;
 	}
 
 	// convert speed: cells per second to pixels per second, in screen coordinates
@@ -46,26 +52,26 @@ _Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocatio
 
 	directions d = dNONE;
 
-	if (_ptEnd.y > _ptStart.y)
+	if (_ptNext.y > _ptStart.y)
 	{
 		d = SOUTH;
 		_ptDistance.x = 0;
 	}
 
-	if (_ptEnd.y < _ptStart.y)
+	if (_ptNext.y < _ptStart.y)
 	{
 		d = NORTH;
 		_ptDistance.x = 0;
 		_ptDistance.y = -_ptDistance.y;
 	}
 
-	if (_ptEnd.x > _ptStart.x)
+	if (_ptNext.x > _ptStart.x)
 	{
 		d = EAST;
 		_ptDistance.y = 0;
 	}
 
-	if (_ptEnd.x < _ptStart.x)
+	if (_ptNext.x < _ptStart.x)
 	{
 		d = WEST;
 		_ptDistance.x = -_ptDistance.x;
@@ -84,30 +90,30 @@ _Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocatio
 	switch (d)
 	{
 	case NORTH:
-		if (_ptNew.y < _ptEnd.y)
+		if (_ptNew.y < _ptNext.y)
 		{
-			_ptNew = _ptEnd;
+			_ptNew = _ptNext;
 			m_bDoneMoving = true;
 		}
 		break;
 	case EAST:
-		if (_ptNew.x > _ptEnd.x)
+		if (_ptNew.x > _ptNext.x)
 		{
-			_ptNew = _ptEnd;
+			_ptNew = _ptNext;
 			m_bDoneMoving = true;
 		}
 		break;
 	case SOUTH:
-		if (_ptNew.y > _ptEnd.y)
+		if (_ptNew.y > _ptNext.y)
 		{
-			_ptNew = _ptEnd;
+			_ptNew = _ptNext;
 			m_bDoneMoving = true;
 		}
 		break;
 	case WEST:
-		if (_ptNew.x < _ptEnd.x)
+		if (_ptNew.x < _ptNext.x)
 		{
-			_ptNew = _ptEnd;
+			_ptNew = _ptNext;
 			m_bDoneMoving = true;
 		}
 		break;
@@ -122,4 +128,106 @@ _Point CAgent::Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocatio
 	g_agentMutex.unlock();
 
 	return _ptNew;
+}
+
+_Point CAgent::ToGrid(_Point ptScreen)
+{
+	_Point _ptGrid(0, 0);
+
+	if (g_iCellSize <= 0)
+	{
+		return _ptGrid;
+	}
+
+	_ptGrid.x = ptScreen.x / g_iCellSize;
+	_ptGrid.y = ptScreen.y / g_iCellSize;
+
+	_ptGrid.x = 2 * _ptGrid.x + 1;
+	_ptGrid.y = 2 * _ptGrid.y + 1;
+
+	return _ptGrid;
+}
+
+_Point CAgent::ToScreen(_Point ptGrid)
+{
+	_Point _ptScreen = ptGrid;
+	_ptScreen.x = _ptScreen.x / 2;
+	_ptScreen.x = _ptScreen.x * g_iCellSize;
+	_ptScreen.y = _ptScreen.y / 2;
+	_ptScreen.y = _ptScreen.y * g_iCellSize;
+	return _ptScreen;
+}
+
+bool CAgent::IsInTransit(_Point ptPos)
+{
+	_Point ptGrid = ToGrid(ptPos);
+	_Point ptScreen = ToScreen(ptGrid);
+
+	return !ptPos.IsNear(ptScreen, 2.0);
+}
+
+bool CAgent::IsDoneMoving()
+{
+	return m_bDoneMoving;
+}
+
+void CAgent::ProjectMazeToScreen(std::vector<_Point>& vptMaze, std::vector<_Point>& vptScreen)
+{
+	vptScreen.clear();
+	for (int i = 0; i < (int)vptMaze.size(); ++i)
+	{
+		// point in maze coordinates
+		_Point pt = vptMaze[i];
+
+		// point in screen coordinates
+		_Point _pt = ToScreen(pt);
+
+		vptScreen.push_back(_pt);
+	}
+}
+
+string CAgent::GetLog()
+{
+	string strLog = "";
+
+	strLog += "Locations: ";
+	strLog += "(";
+	strLog += CUtil::toStringA(m_ptStart.x);
+	strLog += ", ";
+	strLog += CUtil::toStringA(m_ptStart.y);
+	strLog += ") -> ";
+
+	strLog += "(";
+	strLog += CUtil::toStringA(m_ptNext.x);
+	strLog += ", ";
+	strLog += CUtil::toStringA(m_ptNext.y);
+	strLog += ") -> ";
+
+	strLog += "(";
+	strLog += CUtil::toStringA(m_ptTarget.x);
+	strLog += ", ";
+	strLog += CUtil::toStringA(m_ptTarget.y);
+	strLog += ")";
+	strLog += "; ";
+
+	strLog += "Speed: ";
+	strLog += CUtil::toStringA(m_dSpeed, 2);
+	strLog += "; ";
+
+	strLog += "Position: ";
+	strLog += "(";
+	strLog += CUtil::toStringA(position().x);
+	strLog += ", ";
+	strLog += CUtil::toStringA(position().y);
+	strLog += "); ";
+
+	strLog += "Transit: ";
+	strLog += IsInTransit(position()) ? "YES" : "NO";
+	strLog += ", ";
+
+	strLog += "Moving: ";
+	strLog += !IsDoneMoving() ? "YES" : "NO";
+	strLog += " ";
+
+	return strLog;
 }

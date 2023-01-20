@@ -50,6 +50,7 @@ std::string g_strKey = "";
 
 bool g_bShowHelp = false;
 bool g_bShowInfo = true;
+bool g_bShowDebugInfo = false;
 bool g_bFirstTime = true;
 
 // time
@@ -227,6 +228,20 @@ void UpdateGameWorld()
 			g_strText += CUtil::toStringA(n);
 		}
 
+		// debug information
+		if(g_bShowDebugInfo)
+		{
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += "    ";
+			g_strText += g_gw.GetAgent(RUNNER).GetLog();
+		}
+
 		S2D_SetText(g_pText, g_strText.c_str());
 	}
 }
@@ -355,6 +370,11 @@ void on_key(S2D_Event e)
 		if (CUtil::compareNoCase(std::string(e.key), "F8") == 0)
 		{
 			OpenSaveGameFile();
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "F10") == 0)
+		{
+			g_bShowDebugInfo = !g_bShowDebugInfo;
 		}
 
 		if (CUtil::compareNoCase(std::string(e.key), "1") == 0)
@@ -589,11 +609,6 @@ void Cheat()
 		return;
 	}
 
-	if (!g_gw.IsCheatActive())
-	{
-		return;
-	}
-
 	g_x = g_pGameWindow->mouse.x;
 	g_y = g_pGameWindow->mouse.y;
 
@@ -602,17 +617,22 @@ void Cheat()
 		return;
 	}
 
-	if (g_gw.GetCellSize() <= 0)
-	{
-		return;
-	}
-
-	_Point ptGrid = CAgent::ToGrid(g_gw.GetCellSize(), _Point(g_x, g_y));
+	_Point ptGrid = CAgent::ToGrid(_Point(g_x, g_y));
 
 	g_x = ptGrid.x / 2;
 	g_y = ptGrid.y / 2;
 
-	g_gw.Move(AGENT_ID::RUNNER, ptGrid);
+	if (g_gw.IsCheatActive())
+	{
+		g_gw.Move(AGENT_ID::RUNNER, ptGrid);
+	}
+	else
+	{
+		if (ptGrid.IsNear(g_gw.GetAgent(RUNNER).GetCurrentLocation(), 3.0))
+		{
+			g_gw.Move(AGENT_ID::RUNNER, ptGrid);
+		}
+	}
 }
 
 void StartNextLevel()

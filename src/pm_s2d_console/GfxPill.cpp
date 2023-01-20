@@ -34,6 +34,8 @@ void CGfxPill::Initialize()
 	m_pill1 = nullptr;
 	m_pill2 = nullptr;
 
+	m_text = nullptr;
+
 	// start the timer
 	m_Timer.Start();
 }
@@ -87,6 +89,16 @@ void CGfxPill::Load()
 		break;
 	}
 	//////////////////////////////////////////////////////////////////////////
+
+	// load text
+	std::string strFont = "./msc/" + g_settings.textFont;
+	m_text = S2D_CreateText(strFont.c_str(), "", 8);
+
+	// text color
+	m_text->color.r = g_settings.textColor.r;
+	m_text->color.g = g_settings.textColor.g;
+	m_text->color.b = g_settings.textColor.b;
+	m_text->color.a = g_settings.textColor.a;
 
 	m_clrPill = g_settings.pillColor;
 }
@@ -229,4 +241,22 @@ bool CGfxPill::DrawPill(int x, int y)
 	}
 
 	return true;
+}
+
+void CGfxPill::DrawInfo(int x, int y, void* pInfo)
+{
+	if (pInfo == nullptr)
+	{
+		return;
+	}
+
+	// initialize arguments
+	std::string* pstr = (std::string*)(pInfo);
+	S2D_SetText(m_text, pstr->c_str());
+
+	m_text->x = x + 1;
+	m_text->y = y + 1;
+
+	// draw string
+	S2D_DrawText(m_text);
 }

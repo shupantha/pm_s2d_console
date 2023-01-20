@@ -569,7 +569,7 @@ void CGameWorld::SetBonusEffects(CAgent& agent)
 		m_Maze.GetEntirePath(DRAGON, vptEntirePath);
 
 		// convert maze coordinates into screen coordinates
-		CAgent::ProjectMazeToScreen(vptEntirePath, m_vptPath, GetCellSize());
+		CAgent::ProjectMazeToScreen(vptEntirePath, m_vptPath);
 
 		// reset effect
 		int iElapsedTime = (int)(m_timerDragon.GetElapsedTime() * 1000.0);
@@ -593,7 +593,7 @@ void CGameWorld::SetBonusEffects(CAgent& agent)
 		m_Maze.GetEntirePath(RUNNER, vptEntirePath);
 
 		// convert maze coordinates into screen coordinates
-		CAgent::ProjectMazeToScreen(vptEntirePath, m_vptPath, GetCellSize());
+		CAgent::ProjectMazeToScreen(vptEntirePath, m_vptPath);
 
 		// reset effect
 		if (vptEntirePath.size() <= 1)
@@ -656,9 +656,12 @@ bool CGameWorld::MoveAgent(int iAgentIndex)
 	}
 
 	// dead runner does not need to move
-	if (agent.id() == RUNNER && agent.state() == CAgent::DEAD)
+	if (agent.id() == RUNNER)
 	{
-		return true;
+		if (agent.state() == CAgent::DEAD)
+		{
+			return true;
+		}
 	}
 
 	// set any bonus effects
@@ -677,7 +680,7 @@ bool CGameWorld::MoveAgent(int iAgentIndex)
 	std::vector<_Point> vptEntirePath;
 	m_Maze.GetEntirePath(iAgentIndex, vptEntirePath);
 
-	// the path must be at least 2 cells long
+	// the path must be at least 1 cell long
 	if (vptEntirePath.size() >= 1)
 	{
 		// set the next location
@@ -712,8 +715,7 @@ bool CGameWorld::MoveAgent(int iAgentIndex)
 				agent.SetLocations(vptEntirePath.at(0), vptEntirePath.at(0));
 			}
 
-			// if current and target positions are the same,
-			// there is no need to find path
+			// find path if current and target positions are not the same
 			agent.find() = (agent.GetCurrentLocation() != agent.GetTarget());
 		}
 		else
@@ -724,7 +726,7 @@ bool CGameWorld::MoveAgent(int iAgentIndex)
 	}
 	else
 	{
-		// no need to find path if the path length is just 1
+		// no need to find path
 		agent.find() = false;
 	}
 
@@ -1381,8 +1383,8 @@ bool CGameWorld::Move(CAgent::directions direction)
 		return false;
 	}
 
-	// nth runner position starts at current runner position
-	_Point ptNextn = GetAgent(RUNNER).GetCurrentLocation();
+	// nth runner position starts at next runner position
+	_Point ptNextn = GetAgent(RUNNER).GetNextLocation();
 
 	// flag
 	bool bHasMoved = false;
@@ -1439,14 +1441,14 @@ bool CGameWorld::Move(AGENT_ID aID, _Point ptGrid)
 	}
 
 	// nth runner position, initialize with current agent position
-	_Point ptNext = ptGrid;
-	if (!m_Maze.IsValidLocation(ptNext))
+	_Point ptTarget = ptGrid;
+	if (!m_Maze.IsValidLocation(ptTarget))
 	{
 		return false;
 	}
 
 	// set the new agent positions
-	GetAgent(aID).SetTarget(ptNext);
+	GetAgent(aID).SetTarget(ptTarget);
 
 	g_bShowPathToClick = true;
 

@@ -25,7 +25,7 @@
 #define START_LIVES					2
 #define MIN_LEVEL					1
 #define MAX_LEVEL					99
-#define NO_EXTRAS					((MAX_LEVEL + 1) / 4)
+#define NO_EXTRAS					((MAX_LEVEL + 1) / 5)
 
 #define POWER_PILL_FACTOR			0.066	// 6.6%
 
@@ -170,7 +170,7 @@ public:
 	// all coordinates and units below are in A* grids, unless otherwise mentioned
 private:
 	_Point m_ptStart;
-	_Point m_ptEnd;
+	_Point m_ptNext;
 
 private:
 	_Point m_ptTarget;
@@ -180,16 +180,12 @@ private:
 
 	bool m_bDoneMoving;
 
-	int m_iViewRadius;
-
 public:
 	CAgent(int iID) : m_agent(iID)
 	{
 		m_dSpeed = 0;
 
 		m_bDoneMoving = false;
-
-		m_iViewRadius = 0;
 	};
 
 	~CAgent(void) {};
@@ -197,28 +193,28 @@ public:
 	bool IsValid() { return m_agent.IsValid(); };
 
 public:
-	void SetLocations(_Point _ptStart, _Point _ptEnd)
+	void SetLocations(_Point _ptStart, _Point _ptNext)
 	{
 		m_ptStart = _ptStart;
-		m_ptEnd = _ptEnd;
+		m_ptNext = _ptNext;
 
-		m_bDoneMoving = (m_ptStart == m_ptEnd);
+		m_bDoneMoving = (m_ptStart == m_ptNext);
 	};
 
 	void SetStart(_Point _ptStart)
 	{
 		m_ptStart = _ptStart;
-		m_bDoneMoving = (m_ptStart == m_ptEnd);
+		m_bDoneMoving = (m_ptStart == m_ptNext);
 	}
 
-	void SetEnd(_Point _ptEnd)
+	void SetNext(_Point _ptNext)
 	{
-		m_ptEnd = _ptEnd;
-		m_bDoneMoving = (m_ptStart == m_ptEnd);
+		m_ptNext = _ptNext;
+		m_bDoneMoving = (m_ptStart == m_ptNext);
 	}
 
 	_Point GetCurrentLocation()	{ return m_ptStart; };
-	_Point GetNextLocation() { return m_ptEnd; };
+	_Point GetNextLocation() { return m_ptNext; };
 
 public:
 	void SetTarget(_Point _ptTarget) { m_ptTarget = _ptTarget; };
@@ -229,23 +225,19 @@ public:
 	double GetSpeed() { return m_dSpeed; };
 
 public:
-	void SetViewRadius(int iViewRadius) { m_iViewRadius = iViewRadius; };
-	int GetViewRadius() { return m_iViewRadius;	};
-
-public:
 	void SetState(int iState) { m_agent.state = iState; };
 	int GetState() { return m_agent.state; };
 
 private:
 	void SetDirection()
 	{
-		if (m_ptEnd.x > m_ptStart.x)
+		if (m_ptNext.x > m_ptStart.x)
 		{
 			m_agent.direction = RIGHT;
 			return;
 		}
 
-		if (m_ptEnd.x < m_ptStart.x)
+		if (m_ptNext.x < m_ptStart.x)
 		{
 			m_agent.direction = LEFT;
 			return;
@@ -255,76 +247,16 @@ private:
 	};
 
 public:
-	string GetLog()
-	{
-		string strLog = "";
-
-		strLog += "Locations: ";
-		strLog += "(";
-		strLog += CUtil::toStringA(m_ptStart.x);
-		strLog += ", ";
-		strLog += CUtil::toStringA(m_ptStart.y);
-		strLog += ") -> ";
-
-		strLog += "(";
-		strLog += CUtil::toStringA(m_ptTarget.x);
-		strLog += ", ";
-		strLog += CUtil::toStringA(m_ptTarget.y);
-		strLog += ")";
-		strLog += "\r\n";
-
-		strLog += "Speed: ";
-		strLog += CUtil::toStringA(m_dSpeed, 4);
-		strLog += "\r\n";
-
-		return strLog;
-	};
+	string GetLog();
 
 public:
 	_Point Move(int iCellSize, double dTimeElapsed, bool bUpdateStartLocation = true);
 
-	static _Point ToGrid(int iCellSize, _Point ptScreen)
-	{
-		_Point _ptGrid(0, 0);
+	static _Point ToGrid(_Point ptScreen);
+	static _Point ToScreen(_Point ptGrid);
 
-		if (iCellSize <= 0)
-		{
-			return _ptGrid;
-		}
+	static bool IsInTransit(_Point ptPos);
+	bool IsDoneMoving();
 
-		_ptGrid.x = ptScreen.x / iCellSize;
-		_ptGrid.y = ptScreen.y / iCellSize;
-
-		_ptGrid.x = 2 * _ptGrid.x + 1;
-		_ptGrid.y = 2 * _ptGrid.y + 1;
-
-		return _ptGrid;
-	};
-
-	static _Point ToScreen(int iCellSize, _Point ptGrid)
-	{
-		_Point _ptScreen = ptGrid;
-		_ptScreen.x = _ptScreen.x / 2;
-		_ptScreen.x = _ptScreen.x * iCellSize;
-		_ptScreen.y = _ptScreen.y / 2;
-		_ptScreen.y = _ptScreen.y * iCellSize;
-		return _ptScreen;
-	};
-
-	bool IsDoneMoving()	{ return m_bDoneMoving; };
-
-	static void ProjectMazeToScreen(std::vector<_Point>& vptMaze, std::vector<_Point>& vptScreen, int iCellSize)
-	{
-		vptScreen.clear();
-		for (int i = 0; i < (int)vptMaze.size(); ++i)
-		{
-			// point in maze coordinates
-			_Point pt = vptMaze[i];
-
-			// point in screen coordinates
-			_Point _pt = ToScreen(iCellSize, pt);
-
-			vptScreen.push_back(_pt);
-		}
-	};
+	static void ProjectMazeToScreen(std::vector<_Point>& vptMaze, std::vector<_Point>& vptScreen);
 };

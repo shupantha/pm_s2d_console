@@ -12,6 +12,9 @@
 // settings
 extern CSettings g_settings;
 
+// debug info
+extern bool g_bShowDebugInfo;
+
 // current level
 extern unsigned int g_uiLevel;
 
@@ -347,6 +350,17 @@ void CGfxWorld::Draw(CAgent& agent, int iIndex, bool bNoExtras)
 				std::string str = CUtil::toStringA(t);
 				pGfxElement->DrawInfo(x, y, (void*)& str);
 			}
+		}
+	}
+
+	if (g_bShowDebugInfo)
+	{
+		if ((agent.id() == PILL || agent.id() == POWER))
+		{
+			_Point pt = agent.GetCurrentLocation();
+			std::string str = CUtil::format("(%d, %d)", pt.x, pt.y);
+
+			pGfxElement->DrawInfo(x, y, (void*)&str);
 		}
 	}
 }
