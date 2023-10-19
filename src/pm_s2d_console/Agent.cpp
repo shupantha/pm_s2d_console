@@ -190,43 +190,41 @@ string CAgent::GetLog()
 {
 	string strLog = "";
 
-	strLog += "Locations: ";
+	strLog += "l: ";
 	strLog += "(";
-	strLog += CUtil::toStringA(m_ptStart.x);
+	strLog += CUtil::toStringA(m_ptStart.x / 2);
 	strLog += ", ";
-	strLog += CUtil::toStringA(m_ptStart.y);
+	strLog += CUtil::toStringA(m_ptStart.y / 2);
 	strLog += ") -> ";
 
 	strLog += "(";
-	strLog += CUtil::toStringA(m_ptNext.x);
+	strLog += CUtil::toStringA(m_ptNext.x / 2);
 	strLog += ", ";
-	strLog += CUtil::toStringA(m_ptNext.y);
+	strLog += CUtil::toStringA(m_ptNext.y / 2);
 	strLog += ") -> ";
 
 	strLog += "(";
-	strLog += CUtil::toStringA(m_ptTarget.x);
+	strLog += CUtil::toStringA(m_ptTarget.x / 2);
 	strLog += ", ";
-	strLog += CUtil::toStringA(m_ptTarget.y);
+	strLog += CUtil::toStringA(m_ptTarget.y / 2);
 	strLog += ")";
 	strLog += "; ";
 
-	strLog += "Speed: ";
+	strLog += "s: ";
 	strLog += CUtil::toStringA(m_dSpeed, 2);
 	strLog += "; ";
 
-	strLog += "Position: ";
+	strLog += "p: ";
 	strLog += "(";
 	strLog += CUtil::toStringA(position().x);
 	strLog += ", ";
 	strLog += CUtil::toStringA(position().y);
 	strLog += "); ";
 
-	strLog += "Transit: ";
-	strLog += IsInTransit(position()) ? "YES" : "NO";
-	strLog += ", ";
+	strLog += IsInTransit(position()) ? "T" : "..";
+	strLog += " ";
 
-	strLog += "Moving: ";
-	strLog += !IsDoneMoving() ? "YES" : "NO";
+	strLog += !IsDoneMoving() ? "M" : "..";
 	strLog += " ";
 
 	return strLog;

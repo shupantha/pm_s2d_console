@@ -613,17 +613,19 @@ void CGameWorld::SetRunnerSpeed(CAgent& agent)
 		return;
 	}
 
-	if (m_eDifficulty == DIFFICULTY::MEDIUM)
+	// orange bonus effect
+	if (!m_bSpeedBoost)
 	{
-		GetAgent(RUNNER).SetSpeed(RUNNER_SPEED_FAST);
+		if (m_eDifficulty == DIFFICULTY::MEDIUM)
+		{
+			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED_FAST);
+		}
+		else
+		{
+			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED);
+		}
 	}
 	else
-	{
-		GetAgent(RUNNER).SetSpeed(RUNNER_SPEED);
-	}
-
-	// orange bonus effect
-	if (m_bSpeedBoost)
 	{
 		// set speed boost
 		// speed increased by 25% permanently
@@ -635,8 +637,6 @@ void CGameWorld::SetRunnerSpeed(CAgent& agent)
 		{
 			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED * SPEED_BOOST);
 		}
-
-		m_bSpeedBoost = false;
 	}
 }
 
@@ -1442,6 +1442,17 @@ bool CGameWorld::Move(AGENT_ID aID, _Point ptGrid)
 
 	// nth runner position, initialize with current agent position
 	_Point ptTarget = ptGrid;
+	
+	// maze coordinates
+	ptGrid.x = ptGrid.x / 2;
+	ptGrid.y = ptGrid.y / 2;
+
+	// checks
+	if (ptGrid.x >= GetMazeWidth() || ptGrid.y >= GetMazeHeight())
+	{
+		return false;
+	}
+
 	if (!m_Maze.IsValidLocation(ptTarget))
 	{
 		return false;

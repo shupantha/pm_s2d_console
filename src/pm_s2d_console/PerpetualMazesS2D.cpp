@@ -231,15 +231,35 @@ void UpdateGameWorld()
 		// debug information
 		if(g_bShowDebugInfo)
 		{
-			g_strText += "    ";
-			g_strText += "    ";
-			g_strText += "    ";
-			g_strText += "    ";
-			g_strText += "    ";
-			g_strText += "    ";
-			g_strText += "    ";
-			g_strText += "    ";
+			g_strText += "    ----";
+
+			g_strText += "    <";
+			g_strText += CUtil::toStringA(g_x);
+			g_strText += ", ";
+			g_strText += CUtil::toStringA(g_y);
+			g_strText += ">    ";
+			
+			g_strText += "RUNNER:  ";
 			g_strText += g_gw.GetAgent(RUNNER).GetLog();
+			g_strText += "    ";
+
+			/*
+			g_strText += "GINKY:  ";
+			g_strText += g_gw.GetAgent(GINKY).GetLog();
+			g_strText += "    ";
+
+			g_strText += "BINKY:  ";
+			g_strText += g_gw.GetAgent(BINKY).GetLog();
+			g_strText += "    ";
+
+			g_strText += "YINKY:  ";
+			g_strText += g_gw.GetAgent(YINKY).GetLog();
+			g_strText += "    ";
+
+			g_strText += "RINKY:  ";
+			g_strText += g_gw.GetAgent(RINKY).GetLog();
+			g_strText += "    ";
+			*/
 		}
 
 		S2D_SetText(g_pText, g_strText.c_str());

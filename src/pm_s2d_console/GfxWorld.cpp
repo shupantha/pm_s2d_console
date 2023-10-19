@@ -358,7 +358,7 @@ void CGfxWorld::Draw(CAgent& agent, int iIndex, bool bNoExtras)
 		if ((agent.id() == PILL || agent.id() == POWER))
 		{
 			_Point pt = agent.GetCurrentLocation();
-			std::string str = CUtil::format("(%d, %d)", pt.x, pt.y);
+			std::string str = CUtil::format("(%d, %d)", pt.x / 2, pt.y / 2);
 
 			pGfxElement->DrawInfo(x, y, (void*)&str);
 		}
