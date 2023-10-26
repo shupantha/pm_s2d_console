@@ -613,31 +613,20 @@ void CGameWorld::SetRunnerSpeed(CAgent& agent)
 		return;
 	}
 
+	double dSpeed = 0.0;
+
+	// difficulty
+	dSpeed = (m_eDifficulty == DIFFICULTY::MEDIUM) ? RUNNER_SPEED_FAST : RUNNER_SPEED;
+
 	// orange bonus effect
-	if (!m_bSpeedBoost)
+	// set speed boost
+	// speed increased by 25% permanently
+	if (m_bSpeedBoost)
 	{
-		if (m_eDifficulty == DIFFICULTY::MEDIUM)
-		{
-			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED_FAST);
-		}
-		else
-		{
-			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED);
-		}
+		dSpeed = dSpeed * SPEED_BOOST;
 	}
-	else
-	{
-		// set speed boost
-		// speed increased by 25% permanently
-		if (m_eDifficulty == DIFFICULTY::MEDIUM)
-		{
-			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED_FAST * SPEED_BOOST);
-		}
-		else
-		{
-			GetAgent(RUNNER).SetSpeed(RUNNER_SPEED * SPEED_BOOST);
-		}
-	}
+
+	GetAgent(RUNNER).SetSpeed(dSpeed);
 }
 
 bool CGameWorld::MoveAgent(int iAgentIndex)
