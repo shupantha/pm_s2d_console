@@ -1189,8 +1189,8 @@ void CGameWorld::LoadLevel(unsigned int uiLevel, S2D_Window* pGameWindow)
 	int iNumberOfRowColumn = LEVEL_1_GRID_SIZE + uiLevel;
 
 	// set dimension info
-	static int iWidth = pGameWindow->width - g_settings.wallSize;
-	static int iHeight = pGameWindow->height - BOTTOM_BAR_SIZE;
+	int iWidth = pGameWindow->width - g_settings.wallSize;
+	int iHeight = pGameWindow->height - BOTTOM_BAR_SIZE;
 	int iCellSize = std::min(iWidth, iHeight) / iNumberOfRowColumn;
 
 	// reset game over

@@ -12,6 +12,10 @@ private:
 	void Load();
 
 public:
+	void Load(_tstring strSettingsFileName);
+	void LoadNext();
+
+public:
 	int wallSize;
 	_Color wallColor;
 

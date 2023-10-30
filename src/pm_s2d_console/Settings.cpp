@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Settings.h"
 
+#define SETTINGS_FILE_NAME			_T("settings.txt")
+
 CSettings::CSettings()
 {
 	wallSize = 0;
@@ -15,8 +17,16 @@ CSettings::~CSettings()
 
 void CSettings::Load()
 {
+	Load(SETTINGS_FILE_NAME);
+}
+
+void CSettings::Load(_tstring strSettingsFileName)
+{
+	std::string strFilePath = "./msc/";
+	strFilePath += CUtil::getStringA(strSettingsFileName);
+
 	std::string strFileData = "";
-	if (!CUtil::readFile("./msc/settings.txt", strFileData))
+	if (!CUtil::readFile(strFilePath, strFileData))
 	{
 		return;
 	}
@@ -36,7 +46,7 @@ void CSettings::Load()
 		// parse each line
 		std::string strAttribute = tLineData.getToken(0);
 		CUtil::trim(strAttribute);
-	
+
 		if (CUtil::compareNoCase(strAttribute, "WALL_SIZE") == 0)
 		{
 			wallSize = atoi(tLineData.getToken(1).c_str());
@@ -100,4 +110,25 @@ void CSettings::Load()
 			continue;
 		}
 	}
+}
+
+void CSettings::LoadNext()
+{
+	static unsigned int count = 0;
+
+	_tstring strProgramDirectory = CUtil::getProgramDirectory();
+	strProgramDirectory = CUtil::addDirectoryEnding(strProgramDirectory);
+	strProgramDirectory += _T("msc");
+
+	std::vector<_tstring> vFileList;
+	CUtil::getFileList(strProgramDirectory, _T("*.txt"), false, vFileList);
+
+	if (vFileList.size() >= 0)
+	{
+		int index = count % vFileList.size();
+		_tstring strFileName = CUtil::getFileName(vFileList[index], true);
+		Load(strFileName);
+	}
+
+	count++;
 }

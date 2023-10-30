@@ -397,6 +397,11 @@ void on_key(S2D_Event e)
 			g_bShowDebugInfo = !g_bShowDebugInfo;
 		}
 
+		if (CUtil::compareNoCase(std::string(e.key), "F11") == 0)
+		{
+			g_settings.LoadNext();
+		}
+
 		if (CUtil::compareNoCase(std::string(e.key), "1") == 0)
 		{
 			g_gw.SetEasy();

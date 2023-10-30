@@ -404,10 +404,10 @@ void CGfxWorld::Draw(vector<_Point>& vptPath)
 
 void CGfxWorld::DrawMaze()
 {
-	static float r = m_clrWall.r;
-	static float g = m_clrWall.g;
-	static float b = m_clrWall.b;
-	static float a = m_clrWall.a;
+	float r = m_clrWall.r;
+	float g = m_clrWall.g;
+	float b = m_clrWall.b;
+	float a = m_clrWall.a;
 
 	if (!m_pMaze)
 	{
