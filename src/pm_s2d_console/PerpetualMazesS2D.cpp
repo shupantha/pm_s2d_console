@@ -146,12 +146,20 @@ void UpdateGameWorld()
 	// check for completion
 	if (g_gw.IsLevelComplete())
 	{
+		// next level
+		g_strText = "Press TAB to start next level!";
+		S2D_SetText(g_pText, g_strText.c_str());
+
 		return;
 	}
 
 	// check game over
 	if (g_gw.IsGameOver())
 	{
+		// game over
+		g_strText = "Game Over! Press TAB to restart!";
+		S2D_SetText(g_pText, g_strText.c_str());
+
 		return;
 	}
 
