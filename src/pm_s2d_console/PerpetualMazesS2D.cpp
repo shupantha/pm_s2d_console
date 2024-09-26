@@ -217,28 +217,30 @@ void UpdateGameWorld()
 		g_strText += "fps = ";
 		g_strText += CUtil::toStringA(g_dFPS, 1);
 
-		// key press
-		if (!g_strKey.empty())
-		{
-			g_strText += ", ";
-			g_strText += "key = ";
-			g_strText += g_strKey;
-		}
-
-		// spawn
-		if (g_gw.GetSpawnTime() > 0)
-		{
-			g_strText += ", ";
-			g_strText += "spawn = ";
-
-			int n = (RUNNER_SPAWN_TIMEOUT - g_gw.GetSpawnTime()) / 250;
-
-			g_strText += CUtil::toStringA(n);
-		}
-
 		// debug information
 		if(g_bShowDebugInfo)
 		{
+			// key press
+			if (!g_strKey.empty())
+			{
+				g_strText += ", ";
+				g_strText += "key = ";
+				g_strText += g_strKey;
+			}
+
+			/*
+			// spawn
+			if (g_gw.GetSpawnTime() > 0)
+			{
+				g_strText += ", ";
+				g_strText += "spawn = ";
+
+				int n = (RUNNER_SPAWN_TIMEOUT - g_gw.GetSpawnTime()) / 250;
+
+				g_strText += CUtil::toStringA(n);
+			}
+			*/
+
 			g_strText += "    ----";
 
 			g_strText += "    <";
@@ -268,6 +270,10 @@ void UpdateGameWorld()
 			g_strText += g_gw.GetAgent(RINKY).GetLog();
 			g_strText += "    ";
 			*/
+		}
+		else
+		{
+			g_strText += "    ----    Press H for help!";
 		}
 
 		S2D_SetText(g_pText, g_strText.c_str());
