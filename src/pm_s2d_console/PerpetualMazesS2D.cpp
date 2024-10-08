@@ -20,6 +20,8 @@
 #define SCREEN_SHOT_EXT				_T(".png")
 #define ITERATION_COUNT				50
 
+#define IS_DEBUG_CODE				0
+
 // settings
 CSettings g_settings;
 
@@ -40,7 +42,7 @@ int g_y;
 // simple2d
 S2D_Window* g_pGameWindow = nullptr;
 
-S2D_Image* g_helpScreen = S2D_CreateImage("./gfx/common/bg.bmp");
+S2D_Image* g_helpScreen = S2D_CreateImage(IS_DEBUG_CODE ? "./gfx/common/bg.bmp" : "./gfx/common/bg_production.bmp");
 
 // info text
 S2D_Text* g_pText = nullptr;
@@ -210,12 +212,15 @@ void UpdateGameWorld()
 		g_strText += ", ";
 
 		// difficulty
-		g_strText += g_gw.GetDifficulty((CGameWorld::DIFFICULTY)g_iGameDifficulty);
-		g_strText += ", ";
+		if (IS_DEBUG_CODE)
+		{
+			g_strText += g_gw.GetDifficulty((CGameWorld::DIFFICULTY)g_iGameDifficulty);
+			g_strText += ", ";
 
-		// fps
-		g_strText += "fps = ";
-		g_strText += CUtil::toStringA(g_dFPS, 1);
+			// fps
+			g_strText += "fps = ";
+			g_strText += CUtil::toStringA(g_dFPS, 1);
+		}
 
 		// debug information
 		if(g_bShowDebugInfo)
@@ -376,7 +381,7 @@ void on_key(S2D_Event e)
 			g_bShowInfo = !g_bShowInfo;
 		}
 
-		if (CUtil::compareNoCase(std::string(e.key), "C") == 0)
+		if (CUtil::compareNoCase(std::string(e.key), "C") == 0 && IS_DEBUG_CODE)
 		{
 			g_gw.ToggleCheat();
 		}
@@ -396,39 +401,39 @@ void on_key(S2D_Event e)
 			ScreenShot();
 		}
 
-		if (CUtil::compareNoCase(std::string(e.key), "F7") == 0)
-		{
-			OpenSaveGameFolder();
-		}
-
-		if (CUtil::compareNoCase(std::string(e.key), "F8") == 0)
-		{
-			OpenSaveGameFile();
-		}
-
-		if (CUtil::compareNoCase(std::string(e.key), "F10") == 0)
-		{
-			g_bShowDebugInfo = !g_bShowDebugInfo;
-		}
-
-		if (CUtil::compareNoCase(std::string(e.key), "F11") == 0)
+		if (CUtil::compareNoCase(std::string(e.key), "F4") == 0)
 		{
 			g_settings.LoadNext();
 		}
 
-		if (CUtil::compareNoCase(std::string(e.key), "1") == 0)
+		if (CUtil::compareNoCase(std::string(e.key), "F7") == 0 && IS_DEBUG_CODE)
+		{
+			OpenSaveGameFolder();
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "F8") == 0 && IS_DEBUG_CODE)
+		{
+			OpenSaveGameFile();
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "F10") == 0 && IS_DEBUG_CODE)
+		{
+			g_bShowDebugInfo = !g_bShowDebugInfo;
+		}
+
+		if (CUtil::compareNoCase(std::string(e.key), "1") == 0 && IS_DEBUG_CODE)
 		{
 			g_gw.SetEasy();
 			g_iGameDifficulty = (int)g_gw.GetDifficulty();
 		}
 
-		if (CUtil::compareNoCase(std::string(e.key), "2") == 0)
+		if (CUtil::compareNoCase(std::string(e.key), "2") == 0 && IS_DEBUG_CODE)
 		{
 			g_gw.SetMedium();
 			g_iGameDifficulty = (int)g_gw.GetDifficulty();
 		}
 
-		if (CUtil::compareNoCase(std::string(e.key), "3") == 0)
+		if (CUtil::compareNoCase(std::string(e.key), "3") == 0 && IS_DEBUG_CODE)
 		{
 			g_gw.SetHard();
 			g_iGameDifficulty = (int)g_gw.GetDifficulty();

@@ -15,7 +15,7 @@ This README describes the steps that are necessary to get the application up and
 
 ### Setup for Perpetual Mazes ###
 
-* Install Visual Studio 2019, optionally install Visual Assist to make your life easier!
+* Install Visual Studio 2019 / 2022, optionally install Visual Assist to make your life easier!
 * Open solution
 * Build
 * Copy the simple2d dlls, and the "gfx" & "sfx" folders into the directory of the "exe"
